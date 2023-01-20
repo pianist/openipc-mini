@@ -84,8 +84,20 @@ void send_h264_to_client(uint8_t chn_index, const void *p) {
 
     for (uint32_t i = 0; i < stream->u32PackCount; ++i) {
         VENC_PACK_S *pack = &stream->pstPack[i];
+
+#if HISILICON_SDK_GEN < 2
+        uint8_t *pack_data = pack->pu8Addr[0];
+        uint32_t pack_len = pack->u32Len[0];
+
+        if (pack->u32Len[1] > 0)
+        {
+            printf("send_mp4_to_client pack->u32Len[1]=%d\n", pack->u32Len[1]);
+            // TODO: send u32Len[1] bytes too
+        }
+#else
         uint32_t pack_len = pack->u32Len - pack->u32Offset;
         uint8_t *pack_data = pack->pu8Addr + pack->u32Offset;
+#endif
 
         ssize_t nal_start = 3;
         if (!nal_chk3(pack_data, 0)) {
@@ -108,7 +120,7 @@ void send_h264_to_client(uint8_t chn_index, const void *p) {
                 nal.unit_type != NalUnitType_SPS)
                 continue;
 
-            printf("NAL: %s send to %d\n", nal_type_to_str(nal.unit_type), i);
+            // printf("NAL: %s send to %d\n", nal_type_to_str(nal.unit_type), i);
 
             static char len_buf[50];
             ssize_t len_size = sprintf(len_buf, "%zX\r\n", (ssize_t)pack_len);
@@ -133,13 +145,37 @@ void send_h264_to_client(uint8_t chn_index, const void *p) {
 
 struct Mp4Context mp4_context;
 
+bool print_bytes(const char *buf, const uint32_t size) {
+    for (int i = 0; i < size; ++i)
+    {
+        printf("%#x ", buf[i]);
+    }
+    printf("\n");
+    return false;
+}
+
 void send_mp4_to_client(uint8_t chn_index, const void *p) {
     const VENC_STREAM_S *stream = (const VENC_STREAM_S *)p;
 
     for (uint32_t i = 0; i < stream->u32PackCount; ++i) {
         VENC_PACK_S *pack = &stream->pstPack[i];
+
+
+#if HISILICON_SDK_GEN < 2
+        uint8_t *pack_data = pack->pu8Addr[0];
+        uint32_t pack_len = pack->u32Len[0];
+
+        if (pack->u32Len[1] > 0)
+        {
+            printf("send_mp4_to_client pack->u32Len[1]=%d\n", pack->u32Len[1]);
+            // TODO: send u32Len[1] bytes too
+        }
+#else
         uint32_t pack_len = pack->u32Len - pack->u32Offset;
         uint8_t *pack_data = pack->pu8Addr + pack->u32Offset;
+#endif
+
+        // print_bytes(pack_data, 10);
 
         ssize_t nal_start = 3;
         if (!nal_chk3(pack_data, 0)) {
