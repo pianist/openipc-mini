@@ -12,12 +12,12 @@ Please contact [IgorZalatov](mailto:flyrouter@gmail.com) to inquire further.
 
 ### Platform support
 
-| Family      | Audio | JPEG | RTSP | MD | OSD |
-| ----------- | ----- | ---- | ---- | -- | --- |
-| hi3516cv100 |   ❌  |  ❌  |  ❌  | ⁿ/ₐ | ❌ |
-| hi3516cv200 |   ❌  |  ✅  |  ✅  | ✅ |  ❌ |
-| hi3516cv300 |   ❌  |  ✅  |  ✅  | ✅ |  ❌ |
-| hi3516ev300 |   ❌  |  ❌  |  ❌  | ❌ |  ❌ |
+| Family      | Audio | JPEG | RTSP | MP4 | MD | OSD |
+| ----------- | ----- | ---- | ---- | --- | -- | --- |
+| hi3516cv100 |   ❌  |  ❌  |  ❌  | ✅  | ⁿ/ₐ| ❌  |
+| hi3516cv200 |   ❌  |  ✅  |  ✅  | ✅  | ✅ | ❌  |
+| hi3516cv300 |   ❌  |  ✅  |  ✅  | ✅  | ✅ | ❌  |
+| hi3516ev300 |   ❌  |  ❌  |  ❌  | ❌  | ❌ | ❌  |
 
 ### Build with CMake
 
