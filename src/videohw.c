@@ -1283,31 +1283,6 @@ printf("After HI_MPI_VI_SetDevAttr\n");
         }
     }
 
-#if HISILICON_SDK_GEN < 2
-    VPSS_GRP vpss_grp = 0;
-    VENC_GRP VencGrp = 0;
-
-    MPP_CHN_S stSrcChn;
-    MPP_CHN_S stDestChn;
-
-    stSrcChn.enModId = HI_ID_VPSS;
-    stSrcChn.s32DevId = vpss_grp;
-    stSrcChn.s32ChnId = 0;
-
-    stDestChn.enModId = HI_ID_GROUP;
-    stDestChn.s32DevId = VencGrp;
-    stDestChn.s32ChnId = 0;
-
-    s32Ret = HI_MPI_SYS_Bind(&stSrcChn, &stDestChn);
-    if (s32Ret != HI_SUCCESS)
-    {
-        printf(
-                "HI_MPI_SYS_Bind failed with %#x!\n%s\n", s32Ret,
-                hi_errstr(s32Ret));
-        return HI_FAILURE;
-    }
-#endif
-
     if (app_config.mjpeg_enable) {
         VENC_CHN venc_chn = take_next_free_channel(true);
         printf("take_next_free_channel %d!\n", venc_chn);
@@ -1416,6 +1391,31 @@ printf("After HI_MPI_VI_SetDevAttr\n");
             return EXIT_FAILURE;
         }
     }
+
+#if HISILICON_SDK_GEN < 2
+    VPSS_GRP vpss_grp = 0;
+    VENC_GRP VencGrp = 0;
+
+    MPP_CHN_S stSrcChn;
+    MPP_CHN_S stDestChn;
+
+    stSrcChn.enModId = HI_ID_VPSS;
+    stSrcChn.s32DevId = vpss_grp;
+    stSrcChn.s32ChnId = 0;
+
+    stDestChn.enModId = HI_ID_GROUP;
+    stDestChn.s32DevId = VencGrp;
+    stDestChn.s32ChnId = 0;
+
+    s32Ret = HI_MPI_SYS_Bind(&stSrcChn, &stDestChn);
+    if (s32Ret != HI_SUCCESS)
+    {
+        printf(
+                "HI_MPI_SYS_Bind failed with %#x!\n%s\n", s32Ret,
+                hi_errstr(s32Ret));
+        return HI_FAILURE;
+    }
+#endif
 
 #if 1
     {
