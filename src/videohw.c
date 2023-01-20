@@ -86,8 +86,25 @@ HI_S32 VENC_SaveMJpeg(int chn_index, VENC_STREAM_S *pstStream) {
         static char *mjpeg_buf;
         static ssize_t mjpeg_buf_size = 0;
         ssize_t buf_size = 0;
+
         for (HI_U32 i = 0; i < pstStream->u32PackCount; i++) {
             VENC_PACK_S *pstData = &pstStream->pstPack[i];
+#if HISILICON_SDK_GEN < 2
+            ssize_t need_size =
+                buf_size + pstData->u32Len[0] + pstData->u32Len[1] + 2;
+            if (need_size > mjpeg_buf_size) {
+                mjpeg_buf = realloc(mjpeg_buf, need_size);
+                mjpeg_buf_size = need_size;
+            }
+
+            memcpy(
+                mjpeg_buf + buf_size, pstData->pu8Addr[0],
+                pstData->u32Len[0]);
+            memcpy(
+                mjpeg_buf + buf_size + pstData->u32Len[0], pstData->pu8Addr[1],
+                pstData->u32Len[1]);
+            buf_size += pstData->u32Len[0] + pstData->u32Len[1];
+#else
             ssize_t need_size =
                 buf_size + pstData->u32Len - pstData->u32Offset + 2;
             if (need_size > mjpeg_buf_size) {
@@ -98,6 +115,8 @@ HI_S32 VENC_SaveMJpeg(int chn_index, VENC_STREAM_S *pstStream) {
                 mjpeg_buf + buf_size, pstData->pu8Addr + pstData->u32Offset,
                 pstData->u32Len - pstData->u32Offset);
             buf_size += pstData->u32Len - pstData->u32Offset;
+#endif
+
         }
         send_mjpeg(chn_index, mjpeg_buf, buf_size);
     }
